@@ -224,7 +224,7 @@ impl TransactionsApi {
         self.context
             .check_api_output_enabled("Get pending transactions", &accept_type)?;
         let api = self.clone();
-        api.get_pending_transactions_inner().await
+        api.get_pending_transactions_inner(&accept_type).await
     }
 
     /// Get transaction by version
