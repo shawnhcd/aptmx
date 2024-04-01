@@ -916,10 +916,10 @@ impl TransactionsApi {
         ledger_info: &LedgerInfo,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
         let context = self.context.clone();
-        self.context
+        Ok(self.context
             .get_pending_transactions()
             .await?
-            .map(|txns | txns.into_iter().map(|t| t.into()).collect::<Vec<TransactionData>>())
+            .map(|txns | txns.into_iter().map(|t| t.into()).collect::<Vec<TransactionData>>());)
     }
 
     /// List all transactions for an account
