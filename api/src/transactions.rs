@@ -746,9 +746,9 @@ impl TransactionsApi {
         let accept_type = accept_type.clone();
 
         let ledger_info = api_spawn_blocking(move || context.get_latest_ledger_info()).await?;
-        let ledger_version = latest_ledger_info.version();
+        let ledger_version = ledger_info.version();
         let data = self
-            .get_pending_transactions(&ledger_info)
+            .get_pending_txns(&ledger_info)
             .await
             .context(format!("Failed to get pending transactions"))
             .map_err(|err| {
@@ -912,7 +912,7 @@ impl TransactionsApi {
 
     /// Get pending transactions
     /// Author: shawnhcd
-    async fn get_pending_transactions(
+    async fn get_pending_txns(
         &self,
         ledger_info: &LedgerInfo,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
