@@ -705,6 +705,7 @@ impl Context {
         Ok(txns)
     }
 
+    /// Author: shawnhcd
     pub fn render_pending_transactions_non_sequential<E: InternalError>(
         &self,
         ledger_info: &LedgerInfo,
@@ -716,7 +717,7 @@ impl Context {
 
         let state_view = self.latest_state_view_poem(ledger_info)?;
         let resolver = state_view.as_move_resolver();
-        let converter = resolver.as_converter(self.db.clone(), self.table_info_reader.clone());
+        let converter = resolver.as_converter(self.db.clone());
         let txns: Vec<aptos_api_types::Transaction> = data
             .into_iter()
             .map(|t| {
