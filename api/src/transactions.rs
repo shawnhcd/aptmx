@@ -757,14 +757,6 @@ impl TransactionsApi {
                     AptosErrorCode::InternalError,
                     &ledger_info,
                 )
-            })?
-            .context(format!("Failed to get pending transactions"))
-            .map_err(|err| {
-                BasicErrorWith404::internal_with_code(
-                    err,
-                    AptosErrorCode::InternalError,
-                    &ledger_info,
-                )
             })?;
         match accept_type {
             AcceptType::Json => {
@@ -911,6 +903,7 @@ impl TransactionsApi {
     async fn get_pending_txns(
         &self,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
+        println!("transactons::get_pending_txns");
         let context = self.context.clone();
         Ok(context
             .get_pending_transactions()
