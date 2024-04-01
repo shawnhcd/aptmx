@@ -726,6 +726,9 @@ impl Context {
                     TransactionData::Pending(txn) => {
                         converter.try_into_pending_transaction(*txn)?
                     },
+                    _ => {
+
+                    },
                 };
                 Ok(transaction)
             })
