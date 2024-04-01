@@ -731,7 +731,6 @@ impl Context {
                     },
                 };
             })
-            .flatten()
             .collect::<Result<_, anyhow::Error>>()
             .context("Failed to convert pending transaction data from mempool")
             .map_err(|err| {
