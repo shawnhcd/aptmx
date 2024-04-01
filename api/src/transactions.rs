@@ -757,6 +757,14 @@ impl TransactionsApi {
                     AptosErrorCode::InternalError,
                     &ledger_info,
                 )
+            })?
+            .context(format!("Failed to get pending transactions"))
+            .map_err(|err| {
+                BasicErrorWith404::internal_with_code(
+                    err,
+                    AptosErrorCode::InternalError,
+                    &ledger_info,
+                )
             })?;
         match accept_type {
             AcceptType::Json => {
