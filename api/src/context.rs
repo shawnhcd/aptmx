@@ -721,14 +721,18 @@ impl Context {
         let txns: Vec<aptos_api_types::Transaction> = data
             .into_iter()
             .map(|t| {
-                match t {
-                    TransactionData::Pending(txn) => {
-                        let transaction = converter.try_into_pending_transaction(*txn)?;
-                        Ok(transaction)
-                    },
-                    TransactionData::OnChain(_) => {
-                    },
-                };
+                if let TransactionData::Pending(txn) = t {
+                    let transaction = converter.try_into_pending_transaction(*txn)?;
+                    Ok(transaction)
+                }
+                // match t {
+                //     TransactionData::Pending(txn) => {
+                //         let transaction = converter.try_into_pending_transaction(*txn)?;
+                //         Ok(transaction)
+                //     },
+                //     TransactionData::OnChain(_) => {
+                //     },
+                // };
             })
             .collect::<Result<_, anyhow::Error>>()
             .context("Failed to convert pending transaction data from mempool")
