@@ -125,15 +125,17 @@ impl TransactionStore {
             .and_then(|txns| txns.get(&sequence_number))
     }
 
-    /// Fetch pending transactions
-    /// Author: shawnhcd
+    // Fetch pending transactions
+    // Author: shawnhcd
     pub(crate) fn get_pending_transactions(
         &self,
     ) -> Option<Vec<SignedTransaction>> {
         let txns: Vec<SignedTransaction> = self.transactions.values().flat_map(|transactions |transactions.values()).map(|txn |txn.txn.clone()).collect();
         if txns.is_empty() {
+            println!("pending txns is empty");
             None
         } else {
+            println!("pending txns size:{}", txns.len());
             Some(txns)
         }
     }

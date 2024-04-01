@@ -705,7 +705,7 @@ impl Context {
         Ok(txns)
     }
 
-    /// Author: shawnhcd
+    // Author: shawnhcd
     pub fn render_pending_transactions_non_sequential<E: InternalError>(
         &self,
         ledger_info: &LedgerInfo,
@@ -851,8 +851,8 @@ impl Context {
         callback.await.map_err(anyhow::Error::from)
     }
 
-    /// Get pending transactions
-    /// Author: shawnhcd
+    // Get pending transactions
+    // Author: shawnhcd
     pub async fn get_pending_transactions(
         &self,
     ) -> Result<Option<Vec<SignedTransaction>>> {

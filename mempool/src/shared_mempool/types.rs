@@ -232,7 +232,7 @@ pub type SubmissionStatusBundle = (SignedTransaction, SubmissionStatus);
 pub enum MempoolClientRequest {
     SubmitTransaction(SignedTransaction, oneshot::Sender<Result<SubmissionStatus>>),
     GetTransactionByHash(HashValue, oneshot::Sender<Option<SignedTransaction>>),
-    /// Author: shawnhcd
+    // Author: shawnhcd
     GetPendingTransactions(oneshot::Sender<Option<Vec<SignedTransaction>>>),
 }
 

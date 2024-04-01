@@ -177,7 +177,7 @@ async fn handle_client_request<NetworkClient, TransactionValidator>(
                 ))
                 .await;
         },
-        /// Author: shawnhcd
+        // Author: shawnhcd
         MempoolClientRequest::GetPendingTransactions(callback) => {
             // This timer measures how long it took for the bounded executor to *schedule* the
             // task.

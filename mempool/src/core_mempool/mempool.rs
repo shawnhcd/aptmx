@@ -190,8 +190,8 @@ impl Mempool {
         self.transactions.get_by_hash(hash)
     }
 
-    /// Get pending transactions
-    /// Author: shawnhcd
+    // Get pending transactions
+    // Author: shawnhcd
     pub(crate) fn get_pending_transactions(&self) -> Option<Vec<SignedTransaction>> {
         self.transactions.get_pending_transactions()
     }

@@ -209,7 +209,7 @@ impl TransactionsApi {
             .await
     }
 
-    /// Author: shawnhcd
+    // Author: shawnhcd
     #[oai(
         path = "/transactions/pending",
         method = "get",
@@ -736,8 +736,8 @@ impl TransactionsApi {
             .await
     }
 
-    /// Get pending transactions
-    /// Author: shawnhcd
+    // Get pending transactions
+    // Author: shawnhcd
     async fn get_pending_transactions_inner(
         &self,
         accept_type: &AcceptType,
@@ -906,8 +906,8 @@ impl TransactionsApi {
         })
     }
 
-    /// Get pending transactions
-    /// Author: shawnhcd
+    // Get pending transactions
+    // Author: shawnhcd
     async fn get_pending_txns(
         &self,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {

@@ -163,8 +163,8 @@ pub(crate) async fn process_client_get_transaction<NetworkClient, TransactionVal
     }
 }
 
-/// Processes get pending transactions request by client.
-/// Author: shawnhcd
+// Processes get pending transactions request by client.
+// Author: shawnhcd
 pub(crate) async fn process_client_get_pending_transactions<NetworkClient, TransactionValidator>(
     smp: SharedMempool<NetworkClient, TransactionValidator>,
     callback: oneshot::Sender<Option<Vec<SignedTransaction>>>,
