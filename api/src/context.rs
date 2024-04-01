@@ -727,7 +727,7 @@ impl Context {
                         Ok(transaction)
                     },
                     TransactionData::OnChain(_) => {
-                        None
+                        Err("OnChain txn")
                     },
                 };
             })
