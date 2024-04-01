@@ -815,6 +815,22 @@ impl Context {
         callback.await.map_err(anyhow::Error::from)
     }
 
+    /// Get pending transactions
+    /// Author: shawnhcd
+    pub async fn get_pending_transactions(
+        &self,
+    ) -> Result<Option<Vec<SignedTransaction>>> {
+        let (req_sender, callback) = oneshot::channel();
+
+        self.mp_sender
+            .clone()
+            .send(MempoolClientRequest::GetPendingTransactions(req_sender))
+            .await
+            .map_err(anyhow::Error::from)?;
+
+        callback.await.map_err(anyhow::Error::from)
+    }
+
     pub fn get_transaction_by_version(
         &self,
         version: u64,

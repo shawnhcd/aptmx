@@ -190,6 +190,12 @@ impl Mempool {
         self.transactions.get_by_hash(hash)
     }
 
+    /// Get pending transactions
+    /// Author: shawnhcd
+    pub(crate) fn get_pending_transactions(&self) -> Option<Vec<SignedTransaction>> {
+        self.transactions.get_pending_transactions()
+    }
+
     /// Used to add a transaction to the Mempool.
     /// Performs basic validation: checks account's sequence number.
     pub(crate) fn add_txn(

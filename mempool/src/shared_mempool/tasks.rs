@@ -163,6 +163,28 @@ pub(crate) async fn process_client_get_transaction<NetworkClient, TransactionVal
     }
 }
 
+/// Processes get pending transactions request by client.
+/// Author: shawnhcd
+pub(crate) async fn process_client_get_pending_transactions<NetworkClient, TransactionValidator>(
+    smp: SharedMempool<NetworkClient, TransactionValidator>,
+    callback: oneshot::Sender<Option<Vec<SignedTransaction>>>,
+    timer: HistogramTimer,
+) where
+    NetworkClient: NetworkClientInterface<MempoolSyncMsg>,
+    TransactionValidator: TransactionValidation,
+{
+    timer.stop_and_record();
+    let _timer = counters::process_get_txn_latency_timer_client();
+    let txns = smp.mempool.lock().get_pending_transactions();
+    if callback.send(txns).is_err() {
+        warn!(LogSchema::event_log(
+            LogEntry::GetTransaction,
+            LogEvent::CallbackFail
+        ));
+        counters::CLIENT_CALLBACK_FAIL.inc();
+    }
+}
+
 /// Processes transactions from other nodes.
 pub(crate) async fn process_transaction_broadcast<NetworkClient, TransactionValidator>(
     smp: SharedMempool<NetworkClient, TransactionValidator>,

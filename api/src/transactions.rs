@@ -209,6 +209,23 @@ impl TransactionsApi {
             .await
     }
 
+    /// Author: shawnhcd
+    #[oai(
+        path = "/transactions/pending",
+        method = "get",
+        operation_id = "get_pending_transaction",
+        tag = "ApiTags::Transactions"
+    )]
+    async fn get_pending_transactions(
+        &self,
+        accept_type: AcceptType,
+    ) -> BasicResultWith404<Vec<Transaction>> {
+        fail_point_poem("endpoint_pending_transactions")?;
+        self.context
+            .check_api_output_enabled("Get pending transactions", &accept_type)?;
+        api.get_pending_transactions_inner().await
+    }
+
     /// Get transaction by version
     ///
     /// Retrieves a transaction by a given version. If the version has been
@@ -718,6 +735,56 @@ impl TransactionsApi {
             .await
     }
 
+    /// Get pending transactions
+    /// Author: shawnhcd
+    async fn get_pending_transactions_inner(
+        &self,
+        accept_type: &AcceptType,
+    ) -> BasicResultWith404<Vec<Transaction>> {
+        let context = self.context.clone();
+        let accept_type = accept_type.clone();
+
+        let ledger_info = api_spawn_blocking(move || context.get_latest_ledger_info()).await?;
+        let data = self
+            .get_pending_transactions(&ledger_info)
+            .await
+            .context(format!("Failed to get pending transactions"))
+            .map_err(|err| {
+                BasicErrorWith404::internal_with_code(
+                    err,
+                    AptosErrorCode::InternalError,
+                    &ledger_info,
+                )
+            })?
+            .context(format!("Failed to get pending transactions"))
+            .map_err(|err| {
+                BasicErrorWith404::internal_with_code(
+                    err,
+                    AptosErrorCode::InternalError,
+                    &ledger_info,
+                )
+            })?;
+        match accept_type {
+            AcceptType::Json => {
+                let timestamp = self
+                    .context
+                    .get_block_timestamp(&latest_ledger_info, start_version)?;
+                BasicResponse::try_from_json((
+                    self.context.render_transactions_sequential(
+                        &latest_ledger_info,
+                        data,
+                        timestamp,
+                    )?,
+                    &latest_ledger_info,
+                    BasicResponseStatus::Ok,
+                ))
+            },
+            AcceptType::Bcs => {
+                BasicResponse::try_from_bcs((data, &latest_ledger_info, BasicResponseStatus::Ok))
+            },
+        }
+    }
+
     fn get_transaction_by_version_inner(
         &self,
         accept_type: &AcceptType,
@@ -839,6 +906,19 @@ impl TransactionsApi {
                 .map(|t| t.into()),
             _ => from_db.map(|t| t.into()),
         })
+    }
+
+    /// Get pending transactions
+    /// Author: shawnhcd
+    async fn get_pending_transactions(
+        &self,
+        ledger_info: &LedgerInfo,
+    ) -> anyhow::Result<Option<Vec<TransactionData>>> {
+        let context = self.context.clone();
+        self.context
+            .get_pending_transactions()
+            .await?
+            .map(|txns | txns.into_iter().map(|t| t.into()).collect::<Vec<_>>())
     }
 
     /// List all transactions for an account
