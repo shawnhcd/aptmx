@@ -727,7 +727,9 @@ impl Context {
                         Ok(transaction)
                     },
                     TransactionData::OnChain(_) => {
-                        Err("OnChain txn")
+                        let timestamp = self.db.get_block_timestamp(txn.version)?;
+                        let transaction = converter.try_into_onchain_transaction(timestamp, txn)?;
+                        Ok(transaction)
                     },
                 };
             })
