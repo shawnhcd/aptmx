@@ -748,7 +748,7 @@ impl TransactionsApi {
         let ledger_info = api_spawn_blocking(move || context.get_latest_ledger_info()).await?;
         let ledger_version = ledger_info.version();
         let data = self
-            .get_pending_txns(&ledger_info)
+            .get_pending_txns()
             .await
             .context(format!("Failed to get pending transactions"))
             .map_err(|err| {
@@ -768,9 +768,6 @@ impl TransactionsApi {
             })?;
         match accept_type {
             AcceptType::Json => {
-                let timestamp = self
-                    .context
-                    .get_block_timestamp(&ledger_info, ledger_version)?;
                 BasicResponse::try_from_json((
                     self.context.render_pending_transactions_non_sequential(
                         &ledger_info,
@@ -913,10 +910,9 @@ impl TransactionsApi {
     /// Author: shawnhcd
     async fn get_pending_txns(
         &self,
-        ledger_info: &LedgerInfo,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
         let context = self.context.clone();
-        Ok(self.context
+        Ok(context
             .get_pending_transactions()
             .await?
             .map(|txns | txns.into_iter().map(|t| t.into()).collect::<Vec<TransactionData>>()))

@@ -731,17 +731,6 @@ impl Context {
                     },
                 };
                 Ok(transaction)
-                // match t {
-                //     TransactionData::Pending(txn) => {
-                //         let transaction = converter.try_into_pending_transaction(*txn)?;
-                //         Ok(transaction)
-                //     },
-                //     TransactionData::OnChain(txn) => {
-                //         let timestamp = self.db.get_block_timestamp(txn.version)?;
-                //         let transaction = converter.try_into_onchain_transaction(timestamp, txn)?;
-                //         Ok(transaction)
-                //     },
-                // };
             })
             .collect::<Result<_, anyhow::Error>>()
             .context("Failed to convert pending transaction data from mempool")
