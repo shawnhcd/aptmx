@@ -772,7 +772,7 @@ impl TransactionsApi {
                     .context
                     .get_block_timestamp(&ledger_info, ledger_version)?;
                 BasicResponse::try_from_json((
-                    self.context.render_pending_transactions_sequential(
+                    self.context.render_pending_transactions_non_sequential(
                         &ledger_info,
                         data,
                     )?,
