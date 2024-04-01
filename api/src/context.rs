@@ -723,7 +723,9 @@ impl Context {
             .map(|t| {
                 //let txn = converter.try_into_pending_transaction(*t)?;
                 let transaction = match t {
-                    TransactionData::Pending(txn) => converter.try_into_pending_transaction(*t)?;
+                    TransactionData::Pending(txn) => {
+                        converter.try_into_pending_transaction(*t)?
+                    },
                 };
                 Ok(transaction)
             })
