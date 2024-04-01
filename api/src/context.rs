@@ -721,15 +721,16 @@ impl Context {
         let txns: Vec<aptos_api_types::Transaction> = data
             .into_iter()
             .map(|t| {
-                //let txn = converter.try_into_pending_transaction(*t)?;
-                let transaction = match t {
-                    TransactionData::Pending(txn) => {
-                        converter.try_into_pending_transaction(*txn)?
-                    },
-                    _ => {
+                let txn = TransactionData::Pending(t);
+                // let transaction = match t {
+                //     TransactionData::Pending(txn) => {
+                //         converter.try_into_pending_transaction(*txn)?
+                //     },
+                //     TransactionData::OnChain(txn) => {
 
-                    },
-                };
+                //     },
+                // };
+                let transaction = converter.try_into_pending_transaction(*txn)?
                 Ok(transaction)
             })
             .collect::<Result<_, anyhow::Error>>()
