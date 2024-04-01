@@ -14,7 +14,7 @@ use crate::{
 use anyhow::{anyhow, bail, ensure, format_err, Context as AnyhowContext, Result};
 use aptos_api_types::{
     AptosErrorCode, AsConverter, BcsBlock, GasEstimation, LedgerInfo, ResourceGroup,
-    TransactionOnChainData,
+    TransactionOnChainData,TransactionData
 };
 use aptos_config::config::{NodeConfig, RoleType};
 use aptos_crypto::HashValue;
