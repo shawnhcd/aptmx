@@ -705,6 +705,33 @@ impl Context {
         Ok(txns)
     }
 
+    pub fn render_pending_transactions_non_sequential<E: InternalError>(
+        &self,
+        ledger_info: &LedgerInfo,
+        data: Vec<TransactionData>,
+    ) -> Result<Vec<aptos_api_types::Transaction>, E> {
+        if data.is_empty() {
+            return Ok(vec![]);
+        }
+
+        let state_view = self.latest_state_view_poem(ledger_info)?;
+        let resolver = state_view.as_move_resolver();
+        let converter = resolver.as_converter(self.db.clone(), self.table_info_reader.clone());
+        let txns: Vec<aptos_api_types::Transaction> = data
+            .into_iter()
+            .map(|t| {
+                let txn = converter.try_into_pending_transaction(*t)?;
+                Ok(txn)
+            })
+            .collect::<Result<_, anyhow::Error>>()
+            .context("Failed to convert pending transaction data from mempool")
+            .map_err(|err| {
+                E::internal_with_code(err, AptosErrorCode::InternalError, ledger_info)
+            })?;
+
+        Ok(txns)
+    }
+
     pub fn get_transactions(
         &self,
         start_version: u64,
