@@ -726,8 +726,7 @@ impl Context {
                         let transaction = converter.try_into_pending_transaction(*txn)?;
                         Ok(transaction)
                     },
-                    TransactionData::OnChain(txn) => {
-
+                    TransactionData::OnChain(_) => {
                     },
                 };
             })
