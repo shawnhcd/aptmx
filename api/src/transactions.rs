@@ -223,6 +223,7 @@ impl TransactionsApi {
         fail_point_poem("endpoint_pending_transactions")?;
         self.context
             .check_api_output_enabled("Get pending transactions", &accept_type)?;
+        let api = self.clone();
         api.get_pending_transactions_inner().await
     }
 
@@ -745,6 +746,7 @@ impl TransactionsApi {
         let accept_type = accept_type.clone();
 
         let ledger_info = api_spawn_blocking(move || context.get_latest_ledger_info()).await?;
+        let ledger_version = latest_ledger_info.version();
         let data = self
             .get_pending_transactions(&ledger_info)
             .await
@@ -768,19 +770,19 @@ impl TransactionsApi {
             AcceptType::Json => {
                 let timestamp = self
                     .context
-                    .get_block_timestamp(&latest_ledger_info, start_version)?;
+                    .get_block_timestamp(&ledger_info, ledger_version)?;
                 BasicResponse::try_from_json((
                     self.context.render_transactions_sequential(
-                        &latest_ledger_info,
+                        &ledger_info,
                         data,
                         timestamp,
                     )?,
-                    &latest_ledger_info,
+                    &ledger_info,
                     BasicResponseStatus::Ok,
                 ))
             },
             AcceptType::Bcs => {
-                BasicResponse::try_from_bcs((data, &latest_ledger_info, BasicResponseStatus::Ok))
+                BasicResponse::try_from_bcs((data, &ledger_info, BasicResponseStatus::Ok))
             },
         }
     }

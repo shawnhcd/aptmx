@@ -131,7 +131,7 @@ impl TransactionStore {
         &self,
     ) -> Option<Vec<SignedTransaction>> {
         let txns: Vec<SignedTransaction> = self.transactions.values().flat_map(|transactions |transactions.values()).map(|txn |txn.txn.clone()).collect();
-        if (txns.is_empty()) {
+        if txns.is_empty() {
             None
         } else {
             Some(txns)
