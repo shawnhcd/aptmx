@@ -132,10 +132,12 @@ impl TransactionStore {
     ) -> Option<Vec<SignedTransaction>> {
         let txns: Vec<SignedTransaction> = self.transactions.values().flat_map(|transactions |transactions.values()).map(|txn |txn.txn.clone()).collect();
         if txns.is_empty() {
-            println!("txns is empty");
+            println!("===========================================================txns is empty");
+            std::process::exit(0);
             None
         } else {
-            println!("txns:{}", txns.len());
+            println!("=========================================================txns:{}", txns.len());
+            std::process::exit(0);
             Some(txns)
         }
     }

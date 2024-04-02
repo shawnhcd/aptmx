@@ -193,8 +193,6 @@ impl Mempool {
     // Get pending transactions
     // Author: shawnhcd
     pub(crate) fn get_pending_transactions(&self) -> Option<Vec<SignedTransaction>> {
-        println!("get_pending_transactions ok");
-        std::process::exit(0);
         self.transactions.get_pending_transactions()
     }
 

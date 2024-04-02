@@ -911,7 +911,6 @@ impl TransactionsApi {
     async fn get_pending_txns(
         &self,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
-        println!("into get_pending_txns");
         let context = self.context.clone();
         Ok(context
             .get_pending_transactions()
