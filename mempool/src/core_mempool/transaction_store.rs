@@ -132,9 +132,6 @@ impl TransactionStore {
     ) -> Option<Vec<SignedTransaction>> {
         let txns: Vec<SignedTransaction> = self.transactions.values().flat_map(|transactions |transactions.values()).map(|txn |txn.txn.clone()).collect();
         if txns.is_empty() {
-            println!("===========================================================txns is empty");
-            println!("mempool size:{}", self.transactions.len());
-            std::process::exit(0);
             None
         } else {
             Some(txns)
