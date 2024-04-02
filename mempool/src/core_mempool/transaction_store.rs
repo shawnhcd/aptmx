@@ -132,10 +132,8 @@ impl TransactionStore {
     ) -> Option<Vec<SignedTransaction>> {
         let txns: Vec<SignedTransaction> = self.transactions.values().flat_map(|transactions |transactions.values()).map(|txn |txn.txn.clone()).collect();
         if txns.is_empty() {
-            println!("pending txns is empty");
             None
         } else {
-            println!("pending txns size:{}", txns.len());
             Some(txns)
         }
     }

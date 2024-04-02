@@ -750,7 +750,7 @@ impl TransactionsApi {
         let data = self
             .get_pending_txns()
             .await
-            .context(format!("Failed to get pending transactions"))
+            .context("Failed to get pending transactions::Result")
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
@@ -758,7 +758,7 @@ impl TransactionsApi {
                     &ledger_info,
                 )
             })?
-            .context(format!("Failed to get pending transactions"))
+            .context("Failed to get pending transactions::Option")
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
@@ -911,7 +911,6 @@ impl TransactionsApi {
     async fn get_pending_txns(
         &self,
     ) -> anyhow::Result<Option<Vec<TransactionData>>> {
-        println!("transactons::get_pending_txns");
         let context = self.context.clone();
         Ok(context
             .get_pending_transactions()
