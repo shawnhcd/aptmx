@@ -197,6 +197,8 @@ pub(crate) async fn process_transaction_broadcast<NetworkClient, TransactionVali
     NetworkClient: NetworkClientInterface<MempoolSyncMsg>,
     TransactionValidator: TransactionValidation,
 {
+    // shawnhcd
+    aptos_logger::info!("receive pending txns from peer:{}", transactions.len());
     timer.stop_and_record();
     let _timer = counters::process_txn_submit_latency_timer(peer.network_id());
     let results = process_incoming_transactions(&smp, transactions, timeline_state, false);
