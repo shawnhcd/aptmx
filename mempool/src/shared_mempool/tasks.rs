@@ -347,6 +347,8 @@ where
         &mut statuses,
         client_submitted,
     );
+    println!("receive peer txns:{}", transactions.len());
+    std::process::exit(0);
     notify_subscribers(SharedMempoolNotification::NewTransactions, &smp.subscribers);
     statuses
 }
