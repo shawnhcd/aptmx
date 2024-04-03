@@ -340,8 +340,6 @@ where
         })
         .collect();
 
-    println!("receive peer txns:{}", transactions.len());
-    std::process::exit(0);
     validate_and_add_transactions(
         transactions,
         smp,
